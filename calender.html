@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calender</title>
+</head>
+<body>
+    
+    <div id="container">
+        <div id="calHead">
+            <div id="headlft">
+                <span id="monthYear"></span>
+            </div>
+            <div id="headrit">
+                <button onclick="previous()" id="pre">&lt;</button><button onclick="current()" id="crnt">Today</button><button onclick="next()" id="nxt">&gt;</button>
+            </div>
+        </div>
+        <div id="calDates">
+        </div>
+    </div>
+    <script>
+       // window.onload = function(){
+        var monthYear = document.getElementById('monthYear');
+        var calenderDates = document.getElementById('calDates');
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        var date = new Date();
+        var currentMonth = date.getMonth();//5
+        var currentYear = date.getFullYear();//2018
+        var currentDate = date.getDate();//19
+        var currentDay = date.getDay();//2
+        var month = currentMonth;
+        var year = currentYear;
+        function previous(){
+            month--;
+            if(month < 0){
+                month = 11;
+                year--;
+            }
+            monthYear.textContent = months[month] + ' ' + year;
+            var datetable = drawCalender(month, year);
+            calenderDates.innerHTML = '';
+            calenderDates.appendChild(datetable);
+        }
+        function current(){
+            month = currentMonth;
+            year = currentYear;
+            monthYear.textContent = months[month] + ' ' + year;
+            var datetable = drawCalender(month, year);
+            calenderDates.innerHTML = '';
+            calenderDates.appendChild(datetable);
+        }
+        function next(){
+            month++;
+            if(month > 11){
+                month = 0;
+                year++;
+            }
+            monthYear.textContent = months[month] + ' ' + year;
+            var datetable = drawCalender(month, year);
+            calenderDates.innerHTML = '';
+            calenderDates.appendChild(datetable);
+        }
+        
+        monthYear.textContent = months[month] + ' ' + year;
+        var datetable = drawCalender(month, year);
+        calenderDates.appendChild(datetable);
+      //  }
+        function drawCalender(month , year){
+            var firstDate = new Date(year, month, 1).toDateString();
+            var firstDay = firstDate.substring(0, 3);
+            var totalDays = new Date(year, month + 1, 0).getDate();
+            var table = document.createElement('table');
+            var tr = document.createElement('tr');
+            var count = 1;
+            for(let i= 0; i <= 6; i++){
+                var th = document.createElement('th');
+                th.innerHTML = days[i];
+                tr.appendChild(th);
+            }
+            table.appendChild(tr);
+            tr = document.createElement('tr');
+            const firstDayNo = days.indexOf(firstDay);
+            var index = 0;
+            while(index < firstDayNo){
+                index++;
+                var td = document.createElement('td');
+                td.innerHTML = '';
+                tr.appendChild(td);
+            }
+            for(index; index<= 6; index++){
+               var td = document.createElement('td');
+               td.innerHTML = count;
+               count++;
+               tr.appendChild(td);
+            }
+           
+            table.appendChild(tr);
+            for(var j=2 ; j<=6 ; j++ ){
+                tr = document.createElement('tr');
+                for(let i=0 ; i<=6 ; i++){
+                    var td = document.createElement('td');
+                    if(count <= totalDays){
+                        td.innerHTML = count;
+                        tr.appendChild(td);
+                        count++;
+                    }
+                    else{
+                        td.innerHTML = '';
+                        tr.appendChild(td);
+                    }
+                    
+                }
+                table.appendChild(tr);
+            }  
+        return table;
+        }
+
+    </script>
+    <style>
+    body{
+        margin: 0;
+        padding: 0;
+        background: black;
+    }
+    #container{
+        width: 100%;
+        height: 800px;
+       /* background: aqua; */
+        overflow: hidden;
+        background: white;
+    }
+    #calHead{
+        width: 100%;
+        height: 100px;
+        background: black;
+    }
+    #headlft{
+        width: 50%;
+        height: 100px;
+        float: left;
+        text-align: left;
+        padding: 30px;
+        box-sizing: border-box
+    }
+    #headrit{
+        width: 50%;
+        height: 100px;
+        float: left;
+        text-align: right;
+        padding: 30px;
+        box-sizing: border-box
+    }
+    #monthYear{
+        font-size: 30px;
+        color: white;
+    }
+    #pre{
+       width: 25px;
+       height: 30px;
+       background: black;
+       color: aqua;
+       border-radius: 5px;
+       font-size: 20px;
+    }
+    #nxt{
+        width: 25px;
+        height: 30px;
+        background: black;
+        color: aqua;
+        border-radius: 5px;
+        font-size: 20px;
+    }
+    #crnt{
+        width: 80px;
+        height: 30px;
+        background: black;
+        color: aqua;
+        border-radius: 5px;
+        font-size: 20px;
+    }
+    table{
+        table-layout: fixed; 
+        width: 100%;
+        border-collapse: collapse;
+        height: 700px;
+        border: 1px solid black;
+        box-sizing: border-box;
+    }
+    table,th,td{
+        border: 1px solid rgb(36, 35, 35);
+        box-sizing: border-box;
+    }
+    th{
+        
+        text-align: center;
+        font-size: 25px;
+        font-family: Arial, Helvetica, sans-serif;
+        box-sizing: border-box;
+        height: 100px;
+    }
+    td{
+       text-align: right;
+       padding-right: 10px;
+       padding-bottom: 55px;
+       font-size: 20px;
+       height: 100px;
+    }
+    td:hover{
+        background: violet;
+        cursor: pointer;
+    }
+    td:nth-child(1), th:nth-child(1){
+        background: rgb(224, 221, 221);
+    }
+    td:nth-child(1):hover{
+        background: violet;
+    }
+    </style>
+    
+</body>
+</html>
